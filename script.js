@@ -1,11 +1,20 @@
 var uid = new ShortUniqueId();
-
-
-let input = document.querySelector(".task_input");
-let maincontainer = document.querySelector(".main-container");
+// variables
 let colors = ["pink", "blue", "green", "black"];
 let defaultcolor = "black";
 let cfilter = "";
+let locked = false;
+let islocked = false;
+//elements
+let input = document.querySelector(".task_input");
+let maincontainer = document.querySelector(".main-container");
+let colorContainer = document.querySelector(".color-group-container");
+let lockContainer=document.querySelector(".lock-container");
+let unlockContainer=document.querySelector(".unlock-container");
+let pluscontainer=document.querySelector(".plus-container");
+let mutliplycontainer=document.querySelector(".multiply-container");
+
+//event listners
 input.addEventListener("keydown", function (e) {
   if (e.code == "Enter" && input.value) {
     console.log("task value", input.value);
@@ -15,6 +24,36 @@ input.addEventListener("keydown", function (e) {
   }
 });
 
+// filtering tasks acc to color
+colorContainer.addEventListener("click", function (e) {
+  let element = e.target;
+  console.log("e.target", element);
+  if (element != colorContainer) {
+    let filteredCardColor = element.classList[1];
+    filterCards(filteredCardColor);
+  }
+});
+
+lockContainer.addEventListener("click", function (e) {
+    let numberofelements =document.querySelectorAll('.task_main-container>div');
+    for(let i = 0 ; i< numberofelements.length;i++){
+      numberofelements[i].contentEditable=false;
+    }
+    lockContainer.classList.add("active");
+    unlockContainer.classList.remove("active");
+    
+});
+
+unlockContainer.addEventListener("click", function (e) {
+    let numberofelements = document.querySelectorAll(".task_main-container>div");
+    for (let i = 0; i < numberofelements.length; i++) {
+      numberofelements[i].contentEditable = true;
+    }
+    lockContainer.classList.remove("active");
+    unlockContainer.classList.add("active");
+})
+
+//helpers
 function createTask(id, task) {
   let taskcontainer = document.createElement("div");
   taskcontainer.setAttribute("class", "task-container");
@@ -39,16 +78,7 @@ function createTask(id, task) {
   });
 }
 
-// filtering tasks acc to color
-let colorContainer = document.querySelector(".color-group-container");
-colorContainer.addEventListener("click", function (e) {
-  let element = e.target;
-  console.log("e.target", element);
-  if (element != colorContainer) {
-    let filteredCardColor = element.classList[1];
-    filterCards(filteredCardColor);
-  }
-});
+
 
 function filterCards(filtercolor) {
   let alltaskcards = document.querySelectorAll(".task-container");
@@ -72,3 +102,9 @@ function filterCards(filtercolor) {
     }
   }
 }
+
+
+// lock/ unlock features
+
+
+
