@@ -50,23 +50,23 @@ body{
 }
 
 
-.add-cross-container{
+.add-cross-container,.lock-unlock-container{
     width:20%;
     display:flex;
-    
+    margin:1rem;
 }
-.add-cross-container>*{
+.add-cross-container>*,.lock-unlock-container>*{
     width:50%;
     height:100%;
     /* background-color:red; */
 }
 
-.plus-container,.multiply-container{
+.plus-container,.multiply-container,.lock-container,.unlock-container{
     display:flex;
     justify-content: center;
     align-items: center; 
 }
-.fa-plus,.fa-times{
+.tool_icons{
     font-size: 2rem;
     font-weight:400;
 }
