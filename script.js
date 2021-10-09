@@ -5,6 +5,8 @@ let defaultcolor = "black";
 let cfilter = "";
 let locked = false;
 let islocked = false;
+
+let deletemode=false;
 //elements
 let input = document.querySelector(".task_input");
 let maincontainer = document.querySelector(".main-container");
@@ -13,6 +15,7 @@ let lockContainer=document.querySelector(".lock-container");
 let unlockContainer=document.querySelector(".unlock-container");
 let pluscontainer=document.querySelector(".plus-container");
 let mutliplycontainer=document.querySelector(".multiply-container");
+let deletecontainer = document.querySelector(".multiply-container");
 
 //event listners
 input.addEventListener("keydown", function (e) {
@@ -53,6 +56,16 @@ unlockContainer.addEventListener("click", function (e) {
     unlockContainer.classList.add("active");
 })
 
+// implementing deleting the containers
+deletecontainer.addEventListener("click", function (e) {
+  deletemode=!deletemode;
+    if(deletemode==true){
+        deletecontainer.classList.add("active");
+    }else{
+       deletecontainer.classList.remove("active");
+    }
+})
+
 //helpers
 function createTask(id, task) {
   let taskcontainer = document.createElement("div");
@@ -76,6 +89,12 @@ function createTask(id, task) {
     taskheader.classList.remove(cColor);
     taskheader.classList.add(nextcolor);
   });
+  // code for delete mode
+  taskcontainer.addEventListener("click", function (e) {
+    if(deletemode==true){
+      taskcontainer.remove();
+    }
+  })
 }
 
 
