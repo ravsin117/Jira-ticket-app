@@ -122,10 +122,22 @@ function createTask(id, task, flag,color) {
   // code for delete mode
   taskcontainer.addEventListener("click", function (e) {
     if(deletemode==true){
+      let id=taskcontainer.querySelector('.task-id').textContent;
       taskcontainer.remove();
-      // let taskSting= localStorage.getItem("task");
-      // let id=taskcontainer.querySelector('task-id').taskContent;
-      //search on the basis of id 
+      let taskString= localStorage.getItem("tasks");
+      let tasksArr= JSON.parse(taskString);
+      // let id=taskcontainer.querySelector('task-id').textContent;
+      id=id.split('#')[1];
+      // search on the basis of id
+      
+      for(let i = 0 ; i < tasksArr.length ; i++){
+          if(tasksArr[i].id==id){
+            tasksArr.splice(i,1);
+            // tasksArr[i].remove();
+            break;
+          }
+      } 
+      localStorage.setItem("tasks", JSON.stringify(tasksArr));
     }
   })
   
@@ -190,10 +202,10 @@ function filterCards(filtercolor) {
     }
 })()
 
-let selectedDelete = document.querySelector(".multiply-container");
-selectedDelete.addEventListener("click",function (e){
+// let selectedDelete = document.querySelector(".multiply-container");
+// selectedDelete.addEventListener("click",function (e){
     
-})
+// })
 
 // lock/ unlock features
 
