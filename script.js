@@ -1,6 +1,7 @@
 var uid = new ShortUniqueId();
 // variables
 let colors = ["pink", "blue", "green", "black"];
+
 let defaultcolor = "black";
 let cfilter = "";
 let locked = false;
@@ -17,12 +18,15 @@ let pluscontainer=document.querySelector(".plus-container");
 let mutliplycontainer=document.querySelector(".multiply-container");
 let deletecontainer = document.querySelector(".multiply-container");
 
+//checking if any task is present in local storage-> bring it to ui
+
+
 //event listners
 input.addEventListener("keydown", function (e) {
   if (e.code == "Enter" && input.value) {
     console.log("task value", input.value);
     let id = uid();
-    createTask(id, input.value);
+    createTask(id, input.value, true);
     input.value = "";
   }
 });
@@ -67,7 +71,7 @@ deletecontainer.addEventListener("click", function (e) {
 })
 
 //helpers
-function createTask(id, task) {
+function createTask(id, task, flag) {
   let taskcontainer = document.createElement("div");
   taskcontainer.setAttribute("class", "task-container");
   maincontainer.appendChild(taskcontainer);
@@ -80,12 +84,16 @@ function createTask(id, task) {
 
   //add event listner for color change
   let taskheader = taskcontainer.querySelector(".task-header");
+
+  //color
+  let nextcolor;
   taskheader.addEventListener("click", function () {
     let cColor = taskheader.classList[1];
     // console.log(cColor);
     let idx = colors.indexOf(cColor);
     let nextidx = (idx + 1) % 4;
-    let nextcolor = colors[nextidx];
+    nextcolor = colors[nextidx];
+    
     taskheader.classList.remove(cColor);
     taskheader.classList.add(nextcolor);
   });
@@ -93,8 +101,25 @@ function createTask(id, task) {
   taskcontainer.addEventListener("click", function (e) {
     if(deletemode==true){
       taskcontainer.remove();
+      // let taskSting= localStorage.getItem("task");
+      // let id=taskcontainer.querySelector('task-id').taskContent;
+      //search on the basis of id 
     }
   })
+  //loacl storage adding
+  if(flag==true){
+  let taskString = localStorage.getItem("tasks");
+  let tasksArr = JSON.parse(taskString) || [];
+  let taskObject = {
+    id: id,
+    task: task,
+    color: defaultcolor,
+  };
+  tasksArr.push(taskObject);
+  localStorage.setItem("tasks", JSON.stringify(tasksArr));
+  }
+  
+  
 }
 
 
@@ -121,6 +146,14 @@ function filterCards(filtercolor) {
     }
   }
 }
+
+(function(){
+    let tasks= JSON.parse(localStorage.getItem("tasks"));
+    for(let i= 0 ; i < tasks.length; i++) {
+      let {id,task,color}=task[i];
+      createTask(id,task,false);//false bcz here we are not gona create new task , we are bringing prev added tasks to ui
+    }
+})()
 
 
 // lock/ unlock features
