@@ -71,12 +71,12 @@ deletecontainer.addEventListener("click", function (e) {
 })
 
 //helpers
-function createTask(id, task, flag) {
+function createTask(id, task, flag,color) {
   let taskcontainer = document.createElement("div");
   taskcontainer.setAttribute("class", "task-container");
   maincontainer.appendChild(taskcontainer);
   taskcontainer.innerHTML = `
-        <div class="task-header ${defaultcolor}"></div>
+        <div class="task-header ${color?color:defaultcolor}"></div>
         <div class="task_main-container">
         <h3 class="task-id">#${id}</h3>
         <div class="text" contentEditable="true">${task}</div>
@@ -84,7 +84,7 @@ function createTask(id, task, flag) {
 
   //add event listner for color change
   let taskheader = taskcontainer.querySelector(".task-header");
-
+  let mainTask = taskcontainer.querySelector(".task_main-container>div")
   
   let nextcolor;
   // color change
@@ -102,7 +102,7 @@ function createTask(id, task, flag) {
     id=id.split('#')[1];
     
     let taskString = localStorage.getItem("tasks");
-    let tasksArr = JSON.parse(taskString) || [];
+    let tasksArr = JSON.parse(taskString);
     // let taskObject = {
     //   id: id,
     //   task: task,
@@ -128,6 +128,21 @@ function createTask(id, task, flag) {
       //search on the basis of id 
     }
   })
+  
+  mainTask.addEventListener("blur", function (e) {
+    let content=mainTask.textContent;
+    let tasksString= localStorage.getItem("tasks");
+    let tasksArr= JSON.parse(tasksString);
+    for(let i = 0 ; i<tasksArr.length; i++){
+      if(tasksArr[i].id==id){
+          tasksArr[i].task=content;
+          break;
+      }
+    }
+    localStorage.setItem("tasks",JSON.stringify(tasksArr));
+  })
+
+
   //loacl storage adding
   if(flag==true){
   let taskString = localStorage.getItem("tasks");
@@ -140,8 +155,6 @@ function createTask(id, task, flag) {
   tasksArr.push(taskObject);
   localStorage.setItem("tasks", JSON.stringify(tasksArr));
   }
-  
-  
 }
 
 // localStorage.clear()  // to clear all the tasks in the local storage
@@ -170,13 +183,17 @@ function filterCards(filtercolor) {
 }
 
 (function(){
-    let tasks= JSON.parse(localStorage.getItem("tasks"));
+    let tasks= JSON.parse(localStorage.getItem("tasks")) || [];
     for(let i= 0 ; i < tasks.length; i++) {
-      let {id,task,color}=task[i];
-      createTask(id,task,false);//false bcz here we are not gona create new task , we are bringing prev added tasks to ui
+      let {id,task,color}=tasks[i];
+      createTask(id,task,false,color);//false bcz here we are not gona create new task , we are bringing prev added tasks to ui
     }
 })()
 
+let selectedDelete = document.querySelector(".multiply-container");
+selectedDelete.addEventListener("click",function (e){
+    
+})
 
 // lock/ unlock features
 
