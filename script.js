@@ -119,7 +119,7 @@ function createTask(id, task, flag,color) {
     localStorage.setItem("tasks", JSON.stringify(tasksArr));
     
   });
-  // code for delete mode
+  // code for delete mode in ui and local strorage
   taskcontainer.addEventListener("click", function (e) {
     if(deletemode==true){
       let id=taskcontainer.querySelector('.task-id').textContent;
