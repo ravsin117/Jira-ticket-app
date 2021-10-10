@@ -85,8 +85,9 @@ function createTask(id, task, flag) {
   //add event listner for color change
   let taskheader = taskcontainer.querySelector(".task-header");
 
-  //color
+  
   let nextcolor;
+  // color change
   taskheader.addEventListener("click", function () {
     let cColor = taskheader.classList[1];
     // console.log(cColor);
@@ -96,6 +97,27 @@ function createTask(id, task, flag) {
     
     taskheader.classList.remove(cColor);
     taskheader.classList.add(nextcolor);
+    let idElem=taskheader.parentNode.children[1].children[0];// taskheader->task-container->main-taskContainer->task-id.
+    let id=idElem.textContent;
+    id=id.split('#')[1];
+    
+    let taskString = localStorage.getItem("tasks");
+    let tasksArr = JSON.parse(taskString) || [];
+    // let taskObject = {
+    //   id: id,
+    //   task: task,
+    //   color: defaultcolor,
+    // };
+    // tasksArr.push(taskObject);
+    
+    for(let i =0;i<tasksArr.length;i++){
+      if(tasksArr[i].id==id){
+        tasksArr[i].color=nextcolor;
+        break;
+      }
+    }
+    localStorage.setItem("tasks", JSON.stringify(tasksArr));
+    
   });
   // code for delete mode
   taskcontainer.addEventListener("click", function (e) {
@@ -122,7 +144,7 @@ function createTask(id, task, flag) {
   
 }
 
-
+// localStorage.clear()  // to clear all the tasks in the local storage
 
 function filterCards(filtercolor) {
   let alltaskcards = document.querySelectorAll(".task-container");
